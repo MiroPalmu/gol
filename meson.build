@@ -8,8 +8,6 @@ project(
 ####################################################################################################
 # Variables tracking sources and libraries
 ####################################################################################################
-# .cpp files (This might be used later for example clang-format)
-project_sources = []
 # Directories where compiler is able to include from
 project_include_directories = []
 project_include_directories += include_directories('include')
@@ -18,6 +16,8 @@ project_include_directories += include_directories('include')
 # Currently unused:
 # .hpp files (This might be used later for example clang-format)
 project_header_files = [] 
+# .cpp files (This might be used later for example clang-format)
+project_sources = []
 
 
 ####################################################################################################
