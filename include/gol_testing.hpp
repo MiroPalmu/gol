@@ -8,7 +8,7 @@ namespace gol::testing {
 
     template <typename R, typename C, typename I>
     requires game_of_life_cell_range<R, C, I>
-    auto ranges_contains_exactly_same_cells(const R& range_1, const R& range_2) -> bool {
+    [[nodiscard]] constexpr auto ranges_contains_exactly_same_cells(const R& range_1, const R& range_2) -> bool {
         if (std::ranges::size(range_1) != std::ranges::size(range_2)) {
             return false; // Different amount of cells
         }
@@ -44,5 +44,98 @@ namespace gol::testing {
 
     }
 
+namespace patterns {
+
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    struct TestPattern {
+        R initial_pattern;
+        R pattern_after_one_step; // If there no cells effecting evolution of cells in initial_pattern
+    };
+
+    /* 
+        Rules of Game of Life:
+            1) Any live cell with two or three live neighbours survives.
+            2) Any dead cell with three live neighbours becomes a live cell.
+            3) All other live cells die in the next generation. Similarly, all other dead cells stay dead.
+
+        Test pattern catalogue:
+        (syntax: test_pattern_number -> rule_number_tested)
+            1 -> 1
+             
+     */
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_first_rule_1(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{ center_cell, {center_cell.x + 1, center_cell.y + 1}, {center_cell.x + 1, center_cell.y - 1}};
+        const auto after_one_step = R{ center_cell };
+        return { initial, after_one_step };
+    }
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_first_rule_2(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{ center_cell, 
+                            {center_cell.x + 1, center_cell.y + 1},
+                            {center_cell.x - 1, center_cell.y},
+                            {center_cell.x + 1, center_cell.y - 1}
+                        };
+        const auto after_one_step = R{ center_cell };
+        return { initial, after_one_step };
+    }
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_second_rule_1(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{  
+                                {center_cell.x + 1, center_cell.y + 1},
+                                {center_cell.x - 1, center_cell.y},
+                                {center_cell.x + 1, center_cell.y - 1}
+                            };
+        const auto after_one_step = R{ center_cell };
+        return { initial, after_one_step };
+    }
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_third_rule_1(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{ {center_cell.x + 1, center_cell.y + 1},
+                                {center_cell.x + 1, center_cell.y - 1},
+                                {center_cell.x - 1, center_cell.y + 1},
+                                {center_cell.x - 1, center_cell.y - 1}
+                            };
+        const auto after_one_step = R{ };
+        return { initial, after_one_step };
+    }
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_third_rule_2(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{ center_cell, {center_cell.x + 1, center_cell.y} };
+        const auto after_one_step = R{ };
+        return { initial, after_one_step };
+    }
     
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_third_rule_3(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{ center_cell, {center_cell.x, center_cell.y + 1} };
+        const auto after_one_step = R{ };
+        return { initial, after_one_step };
+    }
+
+    template <typename R, typename C, typename I>
+    requires game_of_life_cell_range<R, C, I>
+    constexpr auto create_test_pattern_for_third_rule_4(const C& center_cell) -> TestPattern<R, C, I> {
+        const auto initial = R{ center_cell, {center_cell.x + 1, center_cell.y + 1} };
+        const auto after_one_step = R{ };
+        return { initial, after_one_step };
+    }
+
+
+
+}
+
 }

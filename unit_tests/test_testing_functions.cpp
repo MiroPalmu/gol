@@ -15,6 +15,12 @@ TEMPLATE_TEST_CASE("Tests testing functions", "[testing]", int32_t, int64_t) {
 
         gol::game_of_life_cell_range<cell_t, coordinate_t> auto cell_range = cell_range_t{ {-1, 1}, {1, 1}, {-1, -1}, {1, -1} };
 
+        SECTION("Two empty cell ranges are the same") {
+            const auto empty_1 = cell_range_t{ };
+            const auto empty_2 = cell_range_t{ };
+            REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(empty_1, empty_2));
+        }
+
         SECTION("Two cell ranges are the same (even if in different order)") {
             gol::game_of_life_cell_range<cell_t, coordinate_t> auto another_cell_range = cell_range_t{ {-1, 1}, {-1, -1}, {1, 1}, {1, -1} };
 

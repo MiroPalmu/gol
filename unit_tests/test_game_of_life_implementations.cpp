@@ -82,4 +82,82 @@ TEMPLATE_PRODUCT_TEST_CASE("Test implementations of GOL", "[implementation]", (g
         }
     }
 
+    SECTION("Evolution") {
+        SECTION("First rule of GOL") {
+            SECTION("Pattern 1") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_first_rule_1<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+            SECTION("Pattern 2") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_first_rule_2<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+        }
+        
+        SECTION("Second rule of GOL") {
+            SECTION("Pattern 1") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_second_rule_1<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+        }
+
+        SECTION("Third rule of GOL") {
+            SECTION("Pattern 1") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_third_rule_1<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+
+            SECTION("Pattern 2") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_third_rule_2<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+
+            SECTION("Pattern 3") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_third_rule_3<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+
+            SECTION("Pattern 4") {
+                const auto [initial, after_one_step] = gol::testing::patterns::create_test_pattern_for_third_rule_4<cell_range_t, cell_t, coordinate_t>({-100, -100});
+
+                game.set_alive(initial);
+                game.next_step();
+                REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                    game.get_alive_cells(), after_one_step
+                ));
+            }
+
+        }
+    }
+
 }
