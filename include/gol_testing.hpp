@@ -51,7 +51,7 @@ namespace patterns {
     requires game_of_life_cell_range<R, C, I>
     struct TestPattern {
         R initial_pattern;
-        R pattern_after_one_step; // If there no cells effecting evolution of cells in initial_pattern
+        R pattern_after_n_steps; // If there no cells effecting evolution of cells in initial_pattern
     };
 
     /* 
