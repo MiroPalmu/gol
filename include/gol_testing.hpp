@@ -60,17 +60,14 @@ namespace patterns {
             2) Any dead cell with three live neighbours becomes a live cell.
             3) All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-        Test pattern catalogue:
-        (syntax: test_pattern_number -> rule_number_tested)
-            1 -> 1
-             
+        Following functions tests each rule applied to the center_cell. Other rules may apply to other cells as well.             
      */
 
     template <typename R, typename C, typename I>
     requires game_of_life_cell_range<R, C, I>
     constexpr auto create_test_pattern_for_first_rule_1(const C& center_cell) -> TestPattern<R, C, I> {
         const auto initial = R{ center_cell, {center_cell.x + 1, center_cell.y + 1}, {center_cell.x + 1, center_cell.y - 1}};
-        const auto after_one_step = R{ center_cell };
+        const auto after_one_step = R{ center_cell, {center_cell.x + 1, center_cell.y} };
         return { initial, after_one_step };
     }
 
@@ -82,7 +79,11 @@ namespace patterns {
                             {center_cell.x - 1, center_cell.y},
                             {center_cell.x + 1, center_cell.y - 1}
                         };
-        const auto after_one_step = R{ center_cell };
+        const auto after_one_step = R{ center_cell,
+                                    {center_cell.x, center_cell.y + 1},    
+                                    {center_cell.x, center_cell.y - 1},    
+                                    {center_cell.x + 1, center_cell.y}    
+                                 };
         return { initial, after_one_step };
     }
 

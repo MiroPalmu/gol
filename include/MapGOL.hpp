@@ -22,30 +22,59 @@ class MapGOL {
     using cell_range_t = std::vector<cell_t>;
 
   private:
-    std::map<cell_t, bool> cells;
+    std::map<cell_t, bool> cells_;
 
 
   public:
     auto is_alive(const cell_t& cell) noexcept -> bool {
-        return cells[cell];
+        return cells_[cell];
     };
 
     auto get_alive_cells() const -> cell_range_t {
         auto alive_cells = std::vector<cell_t>{ };
-        for (const auto& [key, is_alive] : cells) {
+        for (const auto& [cell, is_alive] : cells_) {
             if (is_alive) {
-                alive_cells.push_back(key);
+                alive_cells.push_back(cell);
             }
         }
         return alive_cells;
     };
 
     auto next_step() -> void {
-        fmt::print("Next step implementation missing!\n");
+        auto amount_of_neighbors = std::map<cell_t, uint8_t>{ };
+
+        for (const auto& [cell, alive] : cells_) {
+            if (alive) {
+                amount_of_neighbors[cell_t{cell.x + 1, cell.y + 1}] += 1;
+                amount_of_neighbors[cell_t{cell.x + 1, cell.y}] += 1;
+                amount_of_neighbors[cell_t{cell.x + 1, cell.y - 1}] += 1;
+                amount_of_neighbors[cell_t{cell.x, cell.y + 1}] += 1;
+                amount_of_neighbors[cell_t{cell.x, cell.y - 1}] += 1;
+                amount_of_neighbors[cell_t{cell.x - 1, cell.y + 1}] += 1;
+                amount_of_neighbors[cell_t{cell.x - 1, cell.y}] += 1;
+                amount_of_neighbors[cell_t{cell.x - 1, cell.y - 1}] += 1;
+            }
+        }
+
+        auto new_cells = std::map<cell_t, bool>{ };
+
+        for (const auto& [cell, neighbors] : amount_of_neighbors) {
+            if (cells_[cell]) {
+                if (neighbors == 2 || neighbors == 3) {
+                    new_cells[cell] = true;
+                }
+            } else {
+                if (neighbors == 3) {
+                    new_cells[cell] = true;
+                }
+            }
+        }
+
+        cells_ = std::move(new_cells);
     };  
 
     auto set_alive(const cell_t& cell) -> void {
-        cells[cell] = true;
+        cells_[cell] = true;
     };
 
     auto set_alive(const cell_range_t& cells) -> void {
@@ -55,7 +84,7 @@ class MapGOL {
     };
 
     auto kill(const cell_t& cell) -> void {
-        cells[cell] = false;
+        cells_[cell] = false;
     }
 
     auto kill(const cell_range_t& cells) -> void {
