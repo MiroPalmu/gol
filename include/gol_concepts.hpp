@@ -2,11 +2,13 @@
 
 #include <concepts>
 #include <ranges>
+#include <initializer_list>
 
 namespace gol {
 
 template <typename C, typename I>
-concept game_of_life_cell = std::integral<I>
+concept game_of_life_cell = std::signed_integral<I>
+                        && std::equality_comparable<C>
                         && requires (C cell, I coordinate) {
 
     { C{ coordinate, coordinate } } -> std::same_as<C>;
@@ -19,10 +21,10 @@ template <typename R, typename C, typename I>
 concept game_of_life_cell_range = game_of_life_cell<C, I>
                                 && std::ranges::range<R>
                                 && std::movable<R>
-                                && requires (I coordinate) {
+                                && requires (I coordinate, std::initializer_list<C> coordinates) {
     { std::ranges::range_value_t<R>{ } } -> game_of_life_cell<I>;
-
-    R{ {coordinate, coordinate}, {coordinate, coordinate}};
+    { R(coordinates) } -> std::same_as<R>;
+    { R{ {coordinate, coordinate}, {coordinate, coordinate} } } -> std::same_as<R>;
 };
 
 template <typename G> 
