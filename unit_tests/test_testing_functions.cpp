@@ -42,6 +42,7 @@ TEMPLATE_TEST_CASE("Tests testing functions", "[testing]", int32_t, int64_t) {
             gol::game_of_life_cell_range<cell_t, coordinate_t> auto another_cell_range = cell_range_t{ {-1, 2}, {1, 4}, {-1, -3}, {-2, -1} };
 
             REQUIRE(!gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(cell_range, another_cell_range));
+            REQUIRE(!gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(another_cell_range, cell_range));
         }
  
     }
