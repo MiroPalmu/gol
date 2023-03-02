@@ -41,18 +41,18 @@ class MapGOL {
     };
 
     auto next_step() -> void {
-        auto amount_of_neighbors = std::map<cell_t, uint8_t>{ };
+        auto amount_of_neighbors = std::map<cell_t, uint32_t>{ };
 
         for (const auto& [cell, alive] : cells_) {
             if (alive) {
-                amount_of_neighbors[cell_t{cell.x + 1, cell.y + 1}] += 1;
-                amount_of_neighbors[cell_t{cell.x + 1, cell.y}] += 1;
-                amount_of_neighbors[cell_t{cell.x + 1, cell.y - 1}] += 1;
-                amount_of_neighbors[cell_t{cell.x, cell.y + 1}] += 1;
-                amount_of_neighbors[cell_t{cell.x, cell.y - 1}] += 1;
-                amount_of_neighbors[cell_t{cell.x - 1, cell.y + 1}] += 1;
-                amount_of_neighbors[cell_t{cell.x - 1, cell.y}] += 1;
-                amount_of_neighbors[cell_t{cell.x - 1, cell.y - 1}] += 1;
+                amount_of_neighbors[cell_t{cell.x + I { 1 }, cell.y + I { 1 }}] += 1;
+                amount_of_neighbors[cell_t{cell.x + I { 1 }, cell.y}] += 1;
+                amount_of_neighbors[cell_t{cell.x + I { 1 }, cell.y - I { 1 }}] += 1;
+                amount_of_neighbors[cell_t{cell.x, cell.y + I { 1 }}] += 1;
+                amount_of_neighbors[cell_t{cell.x, cell.y - I { 1 }}] += 1;
+                amount_of_neighbors[cell_t{cell.x - I { 1 }, cell.y + I { 1 }}] += 1;
+                amount_of_neighbors[cell_t{cell.x - I { 1 }, cell.y}] += 1;
+                amount_of_neighbors[cell_t{cell.x - I { 1 }, cell.y - I { 1 }}] += 1;
             }
         }
 
