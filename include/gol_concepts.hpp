@@ -21,10 +21,10 @@ template <typename R, typename C, typename I>
 concept game_of_life_cell_range = game_of_life_cell<C, I>
                                 && std::ranges::range<R>
                                 && std::movable<R>
+                                && std::convertible_to<std::ranges::range_value_t<R>, C>
                                 && requires (I coordinate, std::initializer_list<C> coordinates) {
-    { std::ranges::range_value_t<R>{ } } -> game_of_life_cell<I>;
-    { R(coordinates) } -> std::same_as<R>;
-    { R{ {coordinate, coordinate}, {coordinate, coordinate} } } -> std::same_as<R>;
+    { R(coordinates) } -> std::convertible_to<R>;
+    { R{ {coordinate, coordinate}, {coordinate, coordinate} } } -> std::convertible_to<R>;
 };
 
 template <typename G> 

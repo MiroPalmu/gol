@@ -33,8 +33,10 @@ auto get_extend(const G& game) -> Extend<G> {
 
 
 template <gol::game_of_life G>
-void add_cells_from_plaintext_to_game(const std::string_view plaintext, G& game, const typename G::cell_t& where) {
+auto parse_cells_from_plain_text(const std::string_view plaintext, G& game, const typename G::cell_t& where) -> typename G::cell_range_t{
     
+    
+
     auto row_index = typename G::coordinate_t { 0 };
     for (const auto row : plaintext | std::views::split('\n')) {
         if (std::ranges::empty(row) || row.front() == '!') {

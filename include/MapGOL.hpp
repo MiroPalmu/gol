@@ -94,4 +94,7 @@ class MapGOL {
     }
 };
 
+static_assert(game_of_life<MapGOL<int>>);
+static_assert(game_of_life<MapGOL<long int>>);
+
 } // namespace gol
