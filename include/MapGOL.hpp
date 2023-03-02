@@ -13,7 +13,7 @@
 
 namespace gol {
 
-template <std::integral I>
+template <std::signed_integral I>
 class MapGOL {
   public:
     using coordinate_t = I;
