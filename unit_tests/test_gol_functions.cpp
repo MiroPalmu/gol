@@ -21,12 +21,13 @@ R"(!Name: Glider
 OOO
 )"
         };
-        gol::add_cells_from_plaintext_to_game(glider, game, cell_t{ 0, 0 });
+        const auto glider_cells = gol::parse_cells_from_plaintext<TestType>(glider, {1, 3});
 
         REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
-                game.get_alive_cells(), cell_range_t{{ 1, 0 }, {2, 1}, {0, 2}, {1, 2}, {2, 2}}
+                glider_cells, std::vector<cell_t>{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
         ));
     }
+
     SECTION("Adding glider from plaintext with junk in the middle") {
         constexpr auto glider = std::string_view {
 R"(!Name: Glider
@@ -40,10 +41,10 @@ fd
 OOfdfdaO
 )"
         };
-        gol::add_cells_from_plaintext_to_game(glider, game, cell_t{ 0, 0 });
+        const auto glider_cells = gol::parse_cells_from_plaintext<TestType>(glider,    {1, 3});
 
         REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
-                game.get_alive_cells(), cell_range_t{{ 1, 0 }, {2, 1}, {0, 2}, {1, 2}, {2, 2}}
+                glider_cells, std::vector<cell_t>{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
         ));
     }
 }

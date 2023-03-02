@@ -17,6 +17,7 @@ concept game_of_life_cell = std::signed_integral<I>
 
 };
 
+// Lightweight but owning range for passing multiple cells at the same time
 template <typename R, typename C, typename I>
 concept game_of_life_cell_range = game_of_life_cell<C, I>
                                 && std::ranges::range<R>

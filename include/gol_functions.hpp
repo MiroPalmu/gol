@@ -4,6 +4,7 @@
 #include <gol_concepts.hpp>
 #include <concepts>
 #include <limits>
+#include <vector>
 
 
 namespace gol {
@@ -33,9 +34,8 @@ auto get_extend(const G& game) -> Extend<G> {
 
 
 template <gol::game_of_life G>
-auto parse_cells_from_plain_text(const std::string_view plaintext, G& game, const typename G::cell_t& where) -> typename G::cell_range_t{
-    
-    
+constexpr auto parse_cells_from_plaintext(const std::string_view plaintext, const typename G::cell_t where) -> std::vector<typename G::cell_t> {
+    auto cells = std::vector<typename G::cell_t>{ };    
 
     auto row_index = typename G::coordinate_t { 0 };
     for (const auto row : plaintext | std::views::split('\n')) {
@@ -47,7 +47,7 @@ auto parse_cells_from_plain_text(const std::string_view plaintext, G& game, cons
         auto row_contained_info = false;
         for (const auto character : row) {
             if (character == 'O') {
-                game.set_alive(typename G::cell_t { where.x + column_index, where.y + row_index});
+                cells.push_back(typename G::cell_t { where.x + column_index, where.y + row_index});
                 ++column_index;
                 row_contained_info = true;
             } else if (character == '.') {
@@ -60,6 +60,8 @@ auto parse_cells_from_plain_text(const std::string_view plaintext, G& game, cons
             ++row_index;
         }
     }
+
+    return cells;
 }
 
 
