@@ -5,6 +5,8 @@
 #include <concepts>
 #include <limits>
 #include <vector>
+#include <ranges>
+#include <algorithm>
 
 
 namespace gol {
@@ -64,5 +66,10 @@ constexpr auto parse_cells_from_plaintext(const std::string_view plaintext, cons
     return cells;
 }
 
+template <std::ranges::range R, gol::game_of_life G>
+requires std::convertible_to<std::ranges::range_value_t<R>, typename G::cell_t> 
+constexpr auto set_cells_from_range(const R& cells, G& game) -> void {
+    std::ranges::for_each(cells, [&](const auto& x) { game.set_alive(x); });
+}
 
 }

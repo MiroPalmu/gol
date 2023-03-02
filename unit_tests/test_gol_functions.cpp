@@ -24,7 +24,13 @@ OOO
         const auto glider_cells = gol::parse_cells_from_plaintext<TestType>(glider, {1, 3});
 
         REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
-                glider_cells, std::vector<cell_t>{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
+                glider_cells, cell_range_t{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
+        ));
+
+        gol::set_cells_from_range(glider_cells, game);
+
+        REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
+                game.get_alive_cells(), cell_range_t{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
         ));
     }
 
@@ -44,7 +50,7 @@ OOfdfdaO
         const auto glider_cells = gol::parse_cells_from_plaintext<TestType>(glider,    {1, 3});
 
         REQUIRE(gol::testing::ranges_contains_exactly_same_cells<cell_range_t, cell_t, coordinate_t>(
-                glider_cells, std::vector<cell_t>{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
+                glider_cells, cell_range_t{{ 2, 3 }, {3, 4}, {1, 5}, {2, 5}, {3, 5}}
         ));
     }
 }
