@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include <gol_concepts.hpp>
 #include <concepts>
 #include <limits>
@@ -29,5 +30,35 @@ auto get_extend(const G& game) -> Extend<G> {
     }
     return extend;
 };
+
+
+template <gol::game_of_life G>
+void add_cells_from_plaintext_to_game(const std::string_view plaintext, G& game, const typename G::cell_t& where) {
+    
+    auto row_index = typename G::coordinate_t { 0 };
+    for (const auto row : plaintext | std::views::split('\n')) {
+        if (std::ranges::empty(row) || row.front() == '!') {
+            continue;
+        }
+
+        auto column_index = typename G::coordinate_t { 0 };
+        auto row_contained_info = false;
+        for (const auto character : row) {
+            if (character == 'O') {
+                game.set_alive(typename G::cell_t { where.x + column_index, where.y + row_index});
+                ++column_index;
+                row_contained_info = true;
+            } else if (character == '.') {
+                ++column_index;
+                row_contained_info = true;
+            }
+        }
+        
+        if (row_contained_info) {
+            ++row_index;
+        }
+    }
+}
+
 
 }

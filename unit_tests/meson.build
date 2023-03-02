@@ -7,7 +7,8 @@
 single_threaded_unit_tests = [
     'test_unit_test',
     'test_game_of_life_implementations',
-    'test_testing_functions'
+    'test_testing_functions',
+    'test_gol_functions'
 
 ]
 
