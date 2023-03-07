@@ -19,6 +19,7 @@ auto main(int argc, char** argv) -> int {
     const auto implementations_help_text = fmt::format("What game of life implementation to use. Options: {}", fmt::join(implementations, ", "));
     options.add_options()
         ("i,implementation", implementations_help_text, cxxopts::value<std::string>()->default_value("MapGOL"))
+        ("f,file", "Init cells from text file", cxxopts::value<std::string>())
         ("h,help", "Print help");
 
     options.parse_positional({"implementation"});
@@ -32,8 +33,13 @@ auto main(int argc, char** argv) -> int {
         return 0;
     }
 
+
     auto construct_run_options = [&]<gol::game_of_life G>() -> gol::RunOptions<G> {
         auto run_options = gol::RunOptions<G> { };
+
+        if (result.count("file")) {
+            run_options.cell_file = result["file"].as<std::string>();
+        }
         return run_options;
     };
 

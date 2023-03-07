@@ -11,7 +11,11 @@
 #include <fmt/core.h>
 #include <optional>
 #include <string>
-
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <chrono>
+#include <thread>
 
 namespace gol {
 
@@ -58,7 +62,7 @@ auto get_extent(const G& game) -> Extent<G> {
 
 
 template <gol::game_of_life G>
-constexpr auto parse_cells_from_plaintext(const std::string_view plaintext, const typename G::cell_t where) -> std::vector<typename G::cell_t> {
+constexpr auto parse_cells_from_plaintext(const std::string_view plaintext, const typename G::cell_t& where) -> std::vector<typename G::cell_t> {
     auto cells = std::vector<typename G::cell_t>{ };
 
     auto row_index = typename G::coordinate_t { 0 };
@@ -86,6 +90,17 @@ constexpr auto parse_cells_from_plaintext(const std::string_view plaintext, cons
     }
 
     return cells;
+}
+
+template <gol::game_of_life G>
+constexpr auto parse_cells_from_txt_file(const std::filesystem::path path, const typename G::cell_t& where) -> std::vector<typename G::cell_t> {
+    
+    auto file_stream = std::ifstream{ path };
+    if (!file_stream.is_open()) {
+        throw std::runtime_error(fmt::format("Could not open {}", path.string()));
+    }
+    std::istreambuf_iterator<char> it{file_stream}, end;
+    return parse_cells_from_plaintext<G>(std::string(it, end), where);
 }
 
 template <std::ranges::range R, gol::game_of_life G>
@@ -119,7 +134,7 @@ auto print_game(const G& game, const PrintOptions<G>& print_options) -> void {
     const auto alive_cells = game.get_alive_cells();
     for (const auto cell : alive_cells) {
         if (drawn_extent.contains(cell)) {
-            rows[cell.y - drawn_extent.min_y][cell.x - drawn_extent.max_x] = print_options.alive_cell;
+            rows[cell.y - drawn_extent.min_y][cell.x - drawn_extent.min_x] = print_options.alive_cell;
         }
     }
 
@@ -135,16 +150,26 @@ template <gol::game_of_life G>
 struct RunOptions {
     size_t max_iterations = 1000;
     PrintOptions<G> print_options = {};
+    std::optional<std::filesystem::path> cell_file = {};
 };
 
 template<gol::game_of_life G>
 auto run_game(const RunOptions<G>& run_options) -> void {
     auto game = G{ };
     
+    if (run_options.cell_file.has_value()) {
+        const auto cells_from_file = parse_cells_from_txt_file<G>(
+            run_options.cell_file.value(),
+            typename G::cell_t {run_options.print_options.extent.min_x, run_options.print_options.extent.min_y}
+        );
+        set_cells_alive_from_range(cells_from_file, game);
+    }
+
+
     for (size_t iteration = 0; iteration < run_options.max_iterations; ++iteration) {
         print_game(game, run_options.print_options);
-
         game.next_step();
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
 }
