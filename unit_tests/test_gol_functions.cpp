@@ -60,7 +60,7 @@ OOfdfdaO
         ));
     }
 
-    SECTION("Exentd") {
+    SECTION("Extent") {
         game.set_alive(cell_range_t{{-10, 23}, {10, 15}, {1, 2}, {-2, 3}});
 
         SECTION("Get extent from game") {
@@ -70,6 +70,7 @@ OOfdfdaO
             REQUIRE(extent.max_x == 10);
             REQUIRE(extent.min_y == 2);
             REQUIRE(extent.max_y == 23);
+
         }
         SECTION("Get extent from alive cells") {
             const auto alive_cells = game.get_alive_cells();
@@ -79,6 +80,19 @@ OOfdfdaO
             REQUIRE(extent.max_x == 10);
             REQUIRE(extent.min_y == 2);
             REQUIRE(extent.max_y == 23);
+        }
+
+        SECTION("Extent contains correct cells") {
+            const auto extent = gol::get_extent(game);
+
+            REQUIRE(extent.contains(cell_t{-10, 2}));
+            REQUIRE(!extent.contains(cell_t{-10, 23}));
+            REQUIRE(!extent.contains(cell_t{10, 2}));
+            REQUIRE(!extent.contains(cell_t{10, 23}));
+
+            REQUIRE(extent.contains(cell_t{0, 10}));
+            REQUIRE(!extent.contains(cell_t{-100, 232}));
+
         }
     }
 }
