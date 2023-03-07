@@ -36,6 +36,7 @@ project_dependencies += dependency('threads')
 project_dependencies += dependency('catch2-with-main')
 project_dependencies += dependency('fmt')
 project_dependencies += dependency('microsoft_gsl')
+project_dependencies += dependency('cxxopts')
 
 
 # Conan
