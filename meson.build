@@ -64,8 +64,19 @@ endforeach
 ####################################################################################################
 subdir('include')
 subdir('unit_tests')
+subdir('src')
 
 
+####################################################################################################
+# Executable
+####################################################################################################
+
+executable(
+    'gol',
+    project_sources,
+    include_directories : project_include_directories,
+    dependencies : project_dependencies
+)
 
 # Command to generate release build dir
 '''
