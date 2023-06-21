@@ -37,7 +37,7 @@ project_dependencies += dependency('catch2-with-main')
 project_dependencies += dependency('fmt')
 project_dependencies += dependency('microsoft_gsl')
 project_dependencies += dependency('cxxopts')
-
+project_dependencies += dependency('stdexec')
 
 # Conan
 conan_pkgs= {
