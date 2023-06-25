@@ -2,6 +2,7 @@
 #include "gol_functions.hpp"
 #include "gol_concepts.hpp"
 #include "MapGOL.hpp"
+#include "TMapGOL.hpp"
 #include "fmt/ranges.h"
 #include "cxxopts.hpp"
 #include <string_view>
@@ -13,7 +14,8 @@ auto main(int argc, char** argv) -> int {
     auto options = cxxopts::Options("gol", "gol is game of life simulator and library.");
 
     const/* expr in gcc-12 */ auto implementations = std::vector<std::string_view>{
-        "MapGOL"
+        "MapGOL",
+	"TMapGOL"
     };
 
     const auto implementations_help_text = fmt::format("What game of life implementation to use. Options: {}", fmt::join(implementations, ", "));
@@ -50,6 +52,9 @@ auto main(int argc, char** argv) -> int {
 
     if (str_hash("MapGOL") == chosen_implementation_hash) {
         gol::run_game(construct_run_options.operator()<gol::MapGOL<int>>());
+    }
+    else if (str_hash("TMapGOL") == chosen_implementation_hash) {
+	gol::run_game(construct_run_options.operator()<gol::TMapGOL<int>>());
     }
     else {
         fmt::print("{} not implemented. Available impelentations: {}\n", chosen_implementation, fmt::join(implementations, "\n"));
