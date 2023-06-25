@@ -4,11 +4,12 @@
 #include <gol_functions.hpp>
 #include <gol_testing.hpp>
 #include <MapGOL.hpp>
+#include <TMapGOL.hpp>
 
 #include <ranges>
 
 
-TEMPLATE_PRODUCT_TEST_CASE("Test implementations of GOL", "[implementation]", (gol::MapGOL), (int32_t, int64_t)) {
+TEMPLATE_PRODUCT_TEST_CASE("Test implementations of GOL", "[implementation]", (gol::MapGOL, gol::TMapGOL), (int32_t, int64_t)) {
     gol::game_of_life auto game = TestType{ };
     using coordinate_t = typename TestType::coordinate_t;
     using cell_t = typename TestType::cell_t;
